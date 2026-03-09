@@ -120,9 +120,9 @@
     }
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.textContent = msg;
+    toast.innerHTML = `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>${msg}</span>`;
     container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+    setTimeout(() => toast.remove(), 3200);
   }
 
   // ===== DOM References =====
@@ -995,6 +995,25 @@
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  // ===== Extra button bindings =====
+  // Empty-state "Add Course" button in calculator view
+  const calcEmptyAddBtn = $('#calcEmptyAddBtn');
+  if (calcEmptyAddBtn) {
+    calcEmptyAddBtn.addEventListener('click', () => {
+      clearCourseForm();
+      addCourseModal.classList.add('show');
+    });
+  }
+
+  // Empty-state "Add Program" button in programs view
+  const programsEmptyAddBtn = $('#programsEmptyAddBtn');
+  if (programsEmptyAddBtn) {
+    programsEmptyAddBtn.addEventListener('click', () => {
+      clearProgramForm();
+      addProgramModal.classList.add('show');
+    });
+  }
+
   // ===== Initialize =====
   function init() {
     initSettings();
@@ -1002,6 +1021,11 @@
     refreshDashboard();
     refreshGpa();
     renderPrograms();
+    // Apply pop-in animation to dashboard cards on first load
+    document.querySelectorAll('.dashboard-grid .card').forEach((card, i) => {
+      card.style.animationDelay = (i * 0.06) + 's';
+      card.classList.add('pop-in');
+    });
   }
 
   init();

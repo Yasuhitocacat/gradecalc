@@ -235,9 +235,9 @@
         if (Array.isArray(imported.courses) || Array.isArray(imported.programs)) {
           appData = {
             settings: { ...getDefaultData().settings, ...(imported.settings || {}) },
-            courses: imported.courses || [],
-            programs: imported.programs || [],
-            activity: imported.activity || [],
+            courses: Array.isArray(imported.courses) ? imported.courses : [],
+            programs: Array.isArray(imported.programs) ? imported.programs : [],
+            activity: Array.isArray(imported.activity) ? imported.activity : [],
           };
           saveData();
           initSettings();

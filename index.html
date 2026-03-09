@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GradeCalc - Academic Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <path d="M8 7h8M8 11h6"/>
+        </svg>
+        <span class="logo-text">GradeCalc</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-view="calculator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="2" width="16" height="20" rx="2"/>
+          <line x1="8" y1="6" x2="16" y2="6"/>
+          <line x1="8" y1="10" x2="10" y2="10"/>
+          <line x1="14" y1="10" x2="16" y2="10"/>
+          <line x1="8" y1="14" x2="10" y2="14"/>
+          <line x1="14" y1="14" x2="16" y2="14"/>
+          <line x1="8" y1="18" x2="16" y2="18"/>
+        </svg>
+        <span>Grade Calculator</span>
+      </button>
+      <button class="nav-item" data-view="programs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"/>
+        </svg>
+        <span>Academic Programs</span>
+      </button>
+      <button class="nav-item" data-view="gpa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        <span>GPA Overview</span>
+      </button>
+      <button class="nav-item" data-view="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-text">Academic Tools v1.0</div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <h1 class="topbar-title" id="viewTitle">Dashboard</h1>
+      <div class="topbar-actions">
+        <span class="current-term" id="currentTerm">Current Term</span>
+      </div>
+    </header>
+
+    <!-- Dashboard View -->
+    <section class="view active" id="view-dashboard">
+      <div class="dashboard-grid">
+        <!-- Welcome Card -->
+        <div class="card card-welcome">
+          <div class="card-body">
+            <h2>Welcome to GradeCalc</h2>
+            <p>Your personal academic management dashboard. Track your grades, manage your courses, and stay on top of your academic progress.</p>
+            <button class="btn btn-primary" data-navigate="calculator">Open Grade Calculator</button>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="card card-stat">
+          <div class="card-body">
+            <div class="stat-label">Current GPA</div>
+            <div class="stat-value" id="statGpa">--</div>
+            <div class="stat-sub">No data yet</div>
+          </div>
+        </div>
+        <div class="card card-stat">
+          <div class="card-body">
+            <div class="stat-label">Courses</div>
+            <div class="stat-value" id="statCourses">0</div>
+            <div class="stat-sub">This term</div>
+          </div>
+        </div>
+        <div class="card card-stat">
+          <div class="card-body">
+            <div class="stat-label">Assignments</div>
+            <div class="stat-value" id="statAssignments">0</div>
+            <div class="stat-sub">Tracked</div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card card-full">
+          <div class="card-header">
+            <h3>Recent Activity</h3>
+          </div>
+          <div class="card-body">
+            <div class="empty-state" id="dashboardEmpty">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                <line x1="9" y1="12" x2="15" y2="12"/>
+                <line x1="9" y1="16" x2="13" y2="16"/>
+              </svg>
+              <p>No activity yet. Start by adding courses in the Grade Calculator.</p>
+            </div>
+            <div class="activity-list" id="activityList" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grade Calculator View -->
+    <section class="view" id="view-calculator">
+      <div class="calculator-container">
+        <!-- Course Selection / Add -->
+        <div class="calculator-toolbar">
+          <div class="toolbar-left">
+            <label class="toolbar-label" for="courseSelect">Course</label>
+            <select id="courseSelect" class="input-select">
+              <option value="">-- Select or add a course --</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" id="addCourseBtn" title="Add new course">+ Add Course</button>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-outline btn-sm" id="exportBtn" title="Export data">Export</button>
+            <button class="btn btn-outline btn-sm" id="clearAllBtn" title="Clear all data">Clear All</button>
+          </div>
+        </div>
+
+        <!-- Add Course Modal -->
+        <div class="modal-overlay" id="addCourseModal">
+          <div class="modal">
+            <div class="modal-header">
+              <h3>Add New Course</h3>
+              <button class="modal-close" id="closeAddCourse">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="newCourseName">Course Name</label>
+                <input type="text" id="newCourseName" class="input-text" placeholder="e.g. Mathematics 101">
+              </div>
+              <div class="form-group">
+                <label for="newCourseCode">Course Code (optional)</label>
+                <input type="text" id="newCourseCode" class="input-text" placeholder="e.g. MATH101">
+              </div>
+              <div class="form-group">
+                <label for="newCourseCredits">Credit Hours</label>
+                <input type="number" id="newCourseCredits" class="input-text" placeholder="e.g. 3" min="0" max="12" step="0.5">
+              </div>
+              <div class="form-group">
+                <label for="newCourseSubject">Subject Area</label>
+                <select id="newCourseSubject" class="input-select">
+                  <option value="">-- Select subject --</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Science">Science</option>
+                  <option value="English">English</option>
+                  <option value="History">History</option>
+                  <option value="Computer Science">Computer Science</option>
+                  <option value="Arts">Arts</option>
+                  <option value="Business">Business</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Psychology">Psychology</option>
+                  <option value="Philosophy">Philosophy</option>
+                  <option value="Languages">Languages</option>
+                  <option value="Health Sciences">Health Sciences</option>
+                  <option value="Social Sciences">Social Sciences</option>
+                  <option value="Education">Education</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="newGradingScale">Grading Scale</label>
+                <select id="newGradingScale" class="input-select">
+                  <option value="percentage">Percentage (0-100%)</option>
+                  <option value="points">Points</option>
+                  <option value="letter">Letter Grade</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" id="cancelAddCourse">Cancel</button>
+              <button class="btn btn-primary" id="confirmAddCourse">Add Course</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Info Bar -->
+        <div class="course-info-bar" id="courseInfoBar" style="display:none;">
+          <div class="course-info-details">
+            <span class="course-info-name" id="courseInfoName"></span>
+            <span class="course-info-code" id="courseInfoCode"></span>
+            <span class="course-info-credits" id="courseInfoCredits"></span>
+            <span class="course-info-subject" id="courseInfoSubject"></span>
+          </div>
+          <div class="course-info-grade">
+            <span class="course-grade-label">Course Grade:</span>
+            <span class="course-grade-value" id="courseGradeValue">--</span>
+            <span class="course-grade-letter" id="courseGradeLetter"></span>
+          </div>
+        </div>
+
+        <!-- Spreadsheet-style Grade Table -->
+        <div class="spreadsheet-container" id="spreadsheetContainer">
+          <div class="empty-state" id="calcEmpty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <line x1="3" y1="9" x2="21" y2="9"/>
+              <line x1="3" y1="15" x2="21" y2="15"/>
+              <line x1="9" y1="3" x2="9" y2="21"/>
+              <line x1="15" y1="3" x2="15" y2="21"/>
+            </svg>
+            <p>Select or add a course to start entering grades.</p>
+          </div>
+
+          <div class="spreadsheet-wrapper" id="spreadsheetWrapper" style="display:none;">
+            <!-- Categories Section -->
+            <div class="categories-section">
+              <div class="section-header">
+                <h3>Grade Categories</h3>
+                <button class="btn btn-secondary btn-sm" id="addCategoryBtn">+ Add Category</button>
+              </div>
+              <div class="categories-table-wrap">
+                <table class="spreadsheet" id="categoriesTable">
+                  <thead>
+                    <tr>
+                      <th class="col-category">Category</th>
+                      <th class="col-weight">Weight (%)</th>
+                      <th class="col-avg">Average</th>
+                      <th class="col-weighted">Weighted</th>
+                      <th class="col-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="categoriesBody"></tbody>
+                  <tfoot>
+                    <tr class="total-row">
+                      <td>Total</td>
+                      <td id="totalWeight">0%</td>
+                      <td></td>
+                      <td id="totalWeighted">--</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <!-- Assignments Section -->
+            <div class="assignments-section">
+              <div class="section-header">
+                <h3>Assignments</h3>
+                <div class="section-header-actions">
+                  <select id="filterCategory" class="input-select input-sm">
+                    <option value="all">All Categories</option>
+                  </select>
+                  <button class="btn btn-secondary btn-sm" id="addAssignmentBtn">+ Add Assignment</button>
+                </div>
+              </div>
+              <div class="assignments-table-wrap">
+                <table class="spreadsheet" id="assignmentsTable">
+                  <thead>
+                    <tr>
+                      <th class="col-num">#</th>
+                      <th class="col-name">Assignment Name</th>
+                      <th class="col-cat">Category</th>
+                      <th class="col-score">Score</th>
+                      <th class="col-max">Max Score</th>
+                      <th class="col-pct">Percentage</th>
+                      <th class="col-letter">Grade</th>
+                      <th class="col-date">Date</th>
+                      <th class="col-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="assignmentsBody"></tbody>
+                </table>
+                <div class="empty-assignments" id="emptyAssignments">
+                  <p>No assignments yet. Click "+ Add Assignment" to begin.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grade Summary -->
+            <div class="grade-summary">
+              <div class="summary-card">
+                <div class="summary-label">Overall Grade</div>
+                <div class="summary-value" id="summaryGrade">--</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-label">Letter Grade</div>
+                <div class="summary-value" id="summaryLetter">--</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-label">GPA Points</div>
+                <div class="summary-value" id="summaryGpa">--</div>
+              </div>
+              <div class="summary-card">
+                <div class="summary-label">Assignments</div>
+                <div class="summary-value" id="summaryCount">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Academic Programs View -->
+    <section class="view" id="view-programs">
+      <div class="programs-container">
+        <div class="programs-toolbar">
+          <h2>Academic Programs</h2>
+          <button class="btn btn-primary btn-sm" id="addProgramBtn">+ Add Program</button>
+        </div>
+
+        <!-- Add Program Modal -->
+        <div class="modal-overlay" id="addProgramModal">
+          <div class="modal">
+            <div class="modal-header">
+              <h3>Add Academic Program</h3>
+              <button class="modal-close" id="closeAddProgram">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="programName">Program Name</label>
+                <input type="text" id="programName" class="input-text" placeholder="e.g. Bachelor of Science in Computer Science">
+              </div>
+              <div class="form-group">
+                <label for="programInstitution">Institution</label>
+                <input type="text" id="programInstitution" class="input-text" placeholder="e.g. University of Example">
+              </div>
+              <div class="form-group">
+                <label for="programType">Program Type</label>
+                <select id="programType" class="input-select">
+                  <option value="">-- Select type --</option>
+                  <option value="Certificate">Certificate</option>
+                  <option value="Associate">Associate Degree</option>
+                  <option value="Bachelor">Bachelor's Degree</option>
+                  <option value="Master">Master's Degree</option>
+                  <option value="Doctorate">Doctorate</option>
+                  <option value="Diploma">Diploma</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="programStartDate">Start Date</label>
+                <input type="date" id="programStartDate" class="input-text">
+              </div>
+              <div class="form-group">
+                <label for="programExpectedEnd">Expected Completion</label>
+                <input type="date" id="programExpectedEnd" class="input-text">
+              </div>
+              <div class="form-group">
+                <label for="programTotalCredits">Total Credits Required</label>
+                <input type="number" id="programTotalCredits" class="input-text" placeholder="e.g. 120" min="0">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" id="cancelAddProgram">Cancel</button>
+              <button class="btn btn-primary" id="confirmAddProgram">Add Program</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="programs-grid" id="programsGrid">
+          <div class="empty-state" id="programsEmpty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"/>
+            </svg>
+            <p>No academic programs added yet. Click "+ Add Program" to get started.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GPA Overview View -->
+    <section class="view" id="view-gpa">
+      <div class="gpa-container">
+        <div class="gpa-header">
+          <h2>GPA Overview</h2>
+        </div>
+
+        <!-- GPA Summary Cards -->
+        <div class="gpa-cards">
+          <div class="card card-stat">
+            <div class="card-body">
+              <div class="stat-label">Cumulative GPA</div>
+              <div class="stat-value" id="cumulativeGpa">--</div>
+              <div class="stat-sub">All terms</div>
+            </div>
+          </div>
+          <div class="card card-stat">
+            <div class="card-body">
+              <div class="stat-label">Term GPA</div>
+              <div class="stat-value" id="termGpa">--</div>
+              <div class="stat-sub">Current term</div>
+            </div>
+          </div>
+          <div class="card card-stat">
+            <div class="card-body">
+              <div class="stat-label">Total Credits</div>
+              <div class="stat-value" id="totalCredits">0</div>
+              <div class="stat-sub">Completed</div>
+            </div>
+          </div>
+          <div class="card card-stat">
+            <div class="card-body">
+              <div class="stat-label">Total Courses</div>
+              <div class="stat-value" id="totalCourses">0</div>
+              <div class="stat-sub">All terms</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GPA Scale Reference -->
+        <div class="card card-full">
+          <div class="card-header">
+            <h3>Grading Scale Reference</h3>
+          </div>
+          <div class="card-body">
+            <div class="grading-scale-table-wrap">
+              <table class="spreadsheet grading-scale-table">
+                <thead>
+                  <tr>
+                    <th>Letter</th>
+                    <th>Percentage</th>
+                    <th>GPA Points</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>A+</td><td>97 - 100%</td><td>4.0</td><td>Exceptional</td></tr>
+                  <tr><td>A</td><td>93 - 96%</td><td>4.0</td><td>Excellent</td></tr>
+                  <tr><td>A-</td><td>90 - 92%</td><td>3.7</td><td>Very Good</td></tr>
+                  <tr><td>B+</td><td>87 - 89%</td><td>3.3</td><td>Good</td></tr>
+                  <tr><td>B</td><td>83 - 86%</td><td>3.0</td><td>Above Average</td></tr>
+                  <tr><td>B-</td><td>80 - 82%</td><td>2.7</td><td>Satisfactory</td></tr>
+                  <tr><td>C+</td><td>77 - 79%</td><td>2.3</td><td>Fair</td></tr>
+                  <tr><td>C</td><td>73 - 76%</td><td>2.0</td><td>Average</td></tr>
+                  <tr><td>C-</td><td>70 - 72%</td><td>1.7</td><td>Below Average</td></tr>
+                  <tr><td>D+</td><td>67 - 69%</td><td>1.3</td><td>Poor</td></tr>
+                  <tr><td>D</td><td>63 - 66%</td><td>1.0</td><td>Barely Passing</td></tr>
+                  <tr><td>D-</td><td>60 - 62%</td><td>0.7</td><td>Insufficient</td></tr>
+                  <tr><td>F</td><td>0 - 59%</td><td>0.0</td><td>Failing</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course GPA Breakdown -->
+        <div class="card card-full">
+          <div class="card-header">
+            <h3>Course GPA Breakdown</h3>
+          </div>
+          <div class="card-body">
+            <div class="empty-state" id="gpaEmpty">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              <p>Add courses and grades to see your GPA breakdown.</p>
+            </div>
+            <div class="gpa-breakdown-table-wrap" id="gpaBreakdownWrap" style="display:none;">
+              <table class="spreadsheet" id="gpaBreakdownTable">
+                <thead>
+                  <tr>
+                    <th>Course</th>
+                    <th>Credits</th>
+                    <th>Grade</th>
+                    <th>Letter</th>
+                    <th>GPA Points</th>
+                    <th>Quality Points</th>
+                  </tr>
+                </thead>
+                <tbody id="gpaBreakdownBody"></tbody>
+                <tfoot>
+                  <tr class="total-row">
+                    <td>Total / GPA</td>
+                    <td id="gpaTotalCredits">0</td>
+                    <td></td>
+                    <td></td>
+                    <td id="gpaCalculated">--</td>
+                    <td id="gpaTotalQuality">0</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings View -->
+    <section class="view" id="view-settings">
+      <div class="settings-container">
+        <h2>Settings</h2>
+        <div class="card">
+          <div class="card-header"><h3>General</h3></div>
+          <div class="card-body">
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Academic Term</div>
+                <div class="setting-description">Set your current academic term or semester.</div>
+              </div>
+              <input type="text" id="settingTerm" class="input-text input-sm" placeholder="e.g. Fall 2025">
+            </div>
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Default Grading Scale</div>
+                <div class="setting-description">Choose the default grading scale for new courses.</div>
+              </div>
+              <select id="settingScale" class="input-select input-sm">
+                <option value="percentage">Percentage (0-100%)</option>
+                <option value="points">Points</option>
+                <option value="letter">Letter Grade</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Data Management</h3></div>
+          <div class="card-body">
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Export All Data</div>
+                <div class="setting-description">Download all your data as a JSON file.</div>
+              </div>
+              <button class="btn btn-outline btn-sm" id="exportAllData">Export JSON</button>
+            </div>
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Import Data</div>
+                <div class="setting-description">Import data from a previously exported JSON file.</div>
+              </div>
+              <label class="btn btn-outline btn-sm" for="importFile">Import JSON</label>
+              <input type="file" id="importFile" accept=".json" style="display:none;">
+            </div>
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Reset All Data</div>
+                <div class="setting-description">Permanently delete all courses, grades, and programs. This cannot be undone.</div>
+              </div>
+              <button class="btn btn-danger btn-sm" id="resetAllData">Reset Everything</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>About</h3></div>
+          <div class="card-body">
+            <p class="about-text">GradeCalc is a minimal, professional academic management tool designed for students and scholars. Track your grades, manage academic programs, and monitor your GPA -- all in one place.</p>
+            <p class="about-text version-text">Version 1.0.0</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

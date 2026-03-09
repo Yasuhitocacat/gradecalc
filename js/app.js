@@ -672,8 +672,8 @@
 
     if (!hasAnyGrades) return null;
 
-    // Normalize if total weight < 1 (proportional to entered weights)
-    if (totalWeight > 0 && totalWeight < 1) {
+    // Normalize if total weight != 1 (proportional to entered weights)
+    if (totalWeight > 0 && Math.abs(totalWeight - 1) > 0.001) {
       return weightedSum / totalWeight;
     }
 

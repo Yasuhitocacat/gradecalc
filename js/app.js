@@ -232,7 +232,7 @@
     reader.onload = (ev) => {
       try {
         const imported = JSON.parse(ev.target.result);
-        if (imported.courses || imported.programs) {
+        if (Array.isArray(imported.courses) || Array.isArray(imported.programs)) {
           appData = {
             settings: { ...getDefaultData().settings, ...(imported.settings || {}) },
             courses: imported.courses || [],

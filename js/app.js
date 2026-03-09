@@ -300,7 +300,7 @@
     const options = ['<option value="">-- Select or add a course --</option>'];
     appData.courses.forEach((c) => {
       const label = c.code ? `${c.code} - ${c.name}` : c.name;
-      options.push(`<option value="${c.id}">${label}</option>`);
+      options.push(`<option value="${c.id}">${escHtml(label)}</option>`);
     });
     courseSelect.innerHTML = options.join('');
     courseSelect.value = selectedCourseId || '';
